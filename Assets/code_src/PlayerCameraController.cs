@@ -8,25 +8,18 @@ public class PlayerCameraController : MonoBehaviour
 
     private Transform player;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        
+        player = FindObjectOfType<PlayerController>().gameObject.transform;
     }
 
-    // Update is called once per frame
-    void LateUpdate()
+    private void LateUpdate()
     {
-        if (!player)
-        {
-            player = FindObjectOfType<PlayerController>().gameObject.transform;
-        }
+        UpdateCameraPosition();
+    }
 
-        if (!player)
-        {
-            return;
-        }
-
+    private void UpdateCameraPosition()
+    {
         Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
         Vector2 playerPosition = new Vector2(player.position.x, player.position.y);
         Vector2 newPosition = Vector3.Lerp(currentPosition, playerPosition, lerpSpeed * Time.deltaTime);

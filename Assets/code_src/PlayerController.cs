@@ -37,7 +37,11 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         timerManager.Update(Time.deltaTime);
+        HandlePlayerInput();
+    }
 
+    private void HandlePlayerInput()
+    {
         inputX = Input.GetAxisRaw("Horizontal");
 
         if (jumpCount < MAX_JUMP_COUNT && Input.GetKeyDown(KeyCode.Space))
@@ -67,7 +71,11 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        MovePlayer();
+    }
 
+    private void MovePlayer()
+    {
         if (inputX > INPUT_DEAD_ZONE || inputX < -INPUT_DEAD_ZONE)
         {
             rb.AddForce(new Vector2(inputX * maxYSpeed, 0f), ForceMode2D.Impulse);

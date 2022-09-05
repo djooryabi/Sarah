@@ -34,7 +34,6 @@ public class ActionTimer
 
     private void TriggerActions()
     {
-        Debug.Log("Triggering actions");
         foreach (Action action in actions)
         {
             action.Invoke();
