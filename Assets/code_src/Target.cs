@@ -11,9 +11,11 @@ public class Target : MonoBehaviour
 
     private void DestroyOnMeleeAttack(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<MeleeWeapon>() != null)
+        if (collision.gameObject.GetComponent<MeleeWeapon>() == null)
         {
-            Destroy(gameObject);
+            return;
         }
+
+        Destroy(gameObject);
     }
 }

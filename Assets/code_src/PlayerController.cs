@@ -34,12 +34,6 @@ public class PlayerController : MonoBehaviour
         timerManager = new TimerManager();
     }
 
-    void Update()
-    {
-        timerManager.Update(Time.deltaTime);
-        HandlePlayerInput();
-    }
-
     private void HandlePlayerInput()
     {
         inputX = Input.GetAxisRaw("Horizontal");
@@ -53,6 +47,12 @@ public class PlayerController : MonoBehaviour
         {
             MeleeAttack();
         }
+    }
+
+    void Update()
+    {
+        timerManager.Update(Time.deltaTime);
+        HandlePlayerInput();
     }
 
     private void MeleeAttack()
@@ -101,18 +101,32 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Platform")
-        {
-            isGrounded = true;
-            jumpCount = 0;
-        }
+        CheckIfPlatformTouched(collision);
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Platform")
+        CheckIfPlatformExited(collision);
+    }
+
+    private void CheckIfPlatformTouched(Collider2D collision)
+    {
+        if (collision.gameObject.tag != "Platform")
         {
-            isGrounded = false;
+            return;
         }
+
+        isGrounded = true;
+        jumpCount = 0;
+    }
+
+    private void CheckIfPlatformExited(Collider2D collision)
+    {
+        if (collision.gameObject.tag != "Platform")
+        {
+            return;
+        }
+
+        isGrounded = false;
     }
 }
