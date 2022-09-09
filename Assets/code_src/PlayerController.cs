@@ -23,29 +23,38 @@ public class PlayerController : MonoBehaviour
 
     private bool isGrounded;
     private MeleeWeapon meleeWeapon;
-    private TimerManager timerManager;
-    private const int MELEE_TIMER = 0;
+    private TimedActionManager timedActionManager;
+
+    private const string MELEE_WEAPON_ACTIVE_TIME_KEY = "MELEE_WEAPON_ACTIVE_TIME_KEY";
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         meleeWeapon = GetComponentInChildren<MeleeWeapon>();
         meleeWeapon.gameObject.SetActive(false);
-        timerManager = new TimerManager();
+        timedActionManager = new TimedActionManager();
+    }
+
+    private void ActivateMeleeWeapon()
+    {
+        meleeWeapon.gameObject.SetActive(true);
+    }
+
+    private void DeactivateMeleeWeapon()
+    {
+        meleeWeapon.gameObject.SetActive(false);
     }
 
     private void MeleeAttack()
     {
-        if (timerManager.ContainsTimer(MELEE_TIMER))
+        if (timedActionManager.ContainsTimedAction(MELEE_WEAPON_ACTIVE_TIME_KEY))
         {
             return;
         }
 
-        meleeWeapon.gameObject.SetActive(true);
-        List<Action> actions = new List<Action>();
-        actions.Add(() => meleeWeapon.gameObject.SetActive(false));
-        ActionTimer actionTimer = new ActionTimer(MELEE_TIMER, actions, MELEE_WEAPON_ACTIVE_TIME);
-        timerManager.RegisterTimer(actionTimer);
+        ActivateMeleeWeapon();
+        TimedAction deactivateMeleeWeaponAction = new TimedAction(DeactivateMeleeWeapon, MELEE_WEAPON_ACTIVE_TIME);
+        timedActionManager.RegisterTimedAction(MELEE_WEAPON_ACTIVE_TIME_KEY, deactivateMeleeWeaponAction);
     }
 
     private void HandlePlayerInput()
@@ -65,7 +74,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        timerManager.Update(Time.deltaTime);
+        timedActionManager.Update(Time.deltaTime);
         HandlePlayerInput();
     }
 
