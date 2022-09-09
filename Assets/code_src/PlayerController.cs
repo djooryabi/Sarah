@@ -34,6 +34,20 @@ public class PlayerController : MonoBehaviour
         timerManager = new TimerManager();
     }
 
+    private void MeleeAttack()
+    {
+        if (timerManager.ContainsTimer(MELEE_TIMER))
+        {
+            return;
+        }
+
+        meleeWeapon.gameObject.SetActive(true);
+        List<Action> actions = new List<Action>();
+        actions.Add(() => meleeWeapon.gameObject.SetActive(false));
+        ActionTimer actionTimer = new ActionTimer(MELEE_TIMER, actions, MELEE_WEAPON_ACTIVE_TIME);
+        timerManager.RegisterTimer(actionTimer);
+    }
+
     private void HandlePlayerInput()
     {
         inputX = Input.GetAxisRaw("Horizontal");
@@ -53,25 +67,6 @@ public class PlayerController : MonoBehaviour
     {
         timerManager.Update(Time.deltaTime);
         HandlePlayerInput();
-    }
-
-    private void MeleeAttack()
-    {
-        if (timerManager.ContainsTimer(MELEE_TIMER))
-        {
-            return;
-        }
-
-        meleeWeapon.gameObject.SetActive(true);
-        List<Action> actions = new List<Action>();
-        actions.Add(() => meleeWeapon.gameObject.SetActive(false));
-        ActionTimer actionTimer = new ActionTimer(MELEE_TIMER, actions, MELEE_WEAPON_ACTIVE_TIME);
-        timerManager.RegisterTimer(actionTimer);
-    }
-
-    private void FixedUpdate()
-    {
-        MovePlayer();
     }
 
     private void MovePlayer()
@@ -99,14 +94,9 @@ public class PlayerController : MonoBehaviour
         rb.velocity = clampedVelocity;
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void FixedUpdate()
     {
-        CheckIfPlatformTouched(collision);
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        CheckIfPlatformExited(collision);
+        MovePlayer();
     }
 
     private void CheckIfPlatformTouched(Collider2D collision)
@@ -120,6 +110,11 @@ public class PlayerController : MonoBehaviour
         jumpCount = 0;
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        CheckIfPlatformTouched(collision);
+    }
+
     private void CheckIfPlatformExited(Collider2D collision)
     {
         if (collision.gameObject.tag != "Platform")
@@ -128,5 +123,10 @@ public class PlayerController : MonoBehaviour
         }
 
         isGrounded = false;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        CheckIfPlatformExited(collision);
     }
 }
