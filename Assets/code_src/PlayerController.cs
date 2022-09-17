@@ -29,13 +29,27 @@ public class PlayerController : MonoBehaviour
 
     private enum VerticalMovementState
     {
+        // Default state if no state can be determined.
         Error,
+
         Standing,
+
+        // First fixed update tick when a jump is started.
         FirstJumpStart,
+
+        // When jump key is being held down and upward force is being applied to player
         FirstJumpInProgress,
+
+        // When either the jump key is released or the max first jump timer gets exceeded.
+        // The player's velocity will slowly decrease until they go into the falling state when their vertical velocity is negative.
         FirstJumpCompleted,
+
+        // First fixed update tick when a double jump is started.
         DoubleJumpStart,
+
+        // State after a player does a double jump and their vertical velocity is still positive.
         DoubleJumpCompleted,
+
         Falling
     }
 
