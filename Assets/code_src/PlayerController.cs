@@ -187,9 +187,9 @@ public class PlayerController : MonoBehaviour
 
         jumpKeyHeldDown = Input.GetKey(KeyCode.Space);
 
-        if (!meleeKeyJustPressed)
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            meleeKeyJustPressed = Input.GetKeyDown(KeyCode.E);
+            meleeKeyJustPressed = true;
         }
 
         inputX = Input.GetAxisRaw("Horizontal");
@@ -203,7 +203,7 @@ public class PlayerController : MonoBehaviour
         horizontalMovementState = GetHorizontalMovementState();
     }
 
-    private void MovePlayer()
+    private void MovePlayerHorizontally()
     {
         switch (horizontalMovementState)
         {
@@ -215,7 +215,10 @@ public class PlayerController : MonoBehaviour
                 break;
 
         }
+    }
 
+    private void MovePlayerVertically()
+    {
         switch (verticalMovementState)
         {
             case VerticalMovementState.Standing:
@@ -229,7 +232,7 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(new Vector2(0f, firstJumpForce), ForceMode2D.Impulse);
                 break;
             case VerticalMovementState.FirstJumpInProgress:
-                firstJumpTimer += Time.deltaTime;
+                IncrementFirstJumpTimer();
                 rb.AddForce(new Vector2(0f, firstJumpInProgressForce), ForceMode2D.Force);
                 break;
             case VerticalMovementState.FirstJumpCompleted:
@@ -252,16 +255,36 @@ public class PlayerController : MonoBehaviour
             case VerticalMovementState.Error:
                 break;
         }
+    }
 
+    private void LimitVelocityIfTooMuch()
+    {
         float currentXSpeed = rb.velocity.x;
         float currentYSpeed = rb.velocity.y;
 
         Vector2 clampedVelocity = rb.velocity;
 
         clampedVelocity.x = Mathf.Clamp(currentXSpeed, -maxXSpeed, maxXSpeed);
-        //clampedVelocity.y = Mathf.Clamp(currentYSpeed, -maxYSpeed, maxYSpeed);
+        clampedVelocity.y = Mathf.Clamp(currentYSpeed, -maxYSpeed, maxYSpeed);
 
         rb.velocity = clampedVelocity;
+    }
+
+    private void HandlePlayerAttacks()
+    {
+        if (meleeKeyJustPressed)
+        {
+            meleeKeyJustPressed = false;
+            MeleeAttack();
+        }
+    }
+
+    private void MovePlayer()
+    {
+        MovePlayerHorizontally();
+        MovePlayerVertically();
+        LimitVelocityIfTooMuch();
+        HandlePlayerAttacks();
     }
 
     private void FixedUpdate()
