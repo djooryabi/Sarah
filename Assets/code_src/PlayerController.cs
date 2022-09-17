@@ -244,7 +244,6 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(new Vector2(0f, firstJumpInProgressForce), ForceMode2D.Force);
                 break;
             case VerticalMovementState.FirstJumpCompleted:
-                jumpKeyHeldDown = false;
                 break;
 
             case VerticalMovementState.DoubleJumpStart:
@@ -254,7 +253,6 @@ public class PlayerController : MonoBehaviour
                 break;
 
             case VerticalMovementState.DoubleJumpCompleted:
-                jumpKeyHeldDown = false;
                 break;
 
             case VerticalMovementState.Falling:
