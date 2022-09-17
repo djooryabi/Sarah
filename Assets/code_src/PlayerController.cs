@@ -5,31 +5,28 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
-    public float MAX_FIRST_JUMP_TIME = 1f;
-    public float MELEE_WEAPON_ACTIVE_TIME = 0.1f;
-    public const int MAX_JUMP_COUNT = 2;
-    public const float INPUT_DEAD_ZONE = 0.1f;
-
     public float maxXSpeed;
     public float maxYSpeed;
-
     private float inputX;
     private bool meleeKeyJustPressed;
     private bool jumpKeyJustPressed;
     private bool jumpKeyHeldDown;
-
     public float firstJumpTimer;
     public float firstJumpForce;
     public float firstJumpInProgressForce;
     public float doubleJumpForce;
-
     private Rigidbody2D rb;
-
     private int currentJumpCount;
-
     private bool isGrounded;
     private MeleeWeapon meleeWeapon;
     private TimedActionManager timedActionManager;
+    private VerticalMovementState verticalMovementState;
+    private HorizontalMovementState horizontalMovementState;
+    private const float MAX_FIRST_JUMP_TIME = 1f;
+    private const float MELEE_WEAPON_ACTIVE_TIME = 0.1f;
+    private const int MAX_JUMP_COUNT = 2;
+    private const float INPUT_DEAD_ZONE = 0.1f;
+
     private enum VerticalMovementState
     {
         Error,
@@ -49,9 +46,6 @@ public class PlayerController : MonoBehaviour
         RunningLeft,
         RunningRight
     }
-
-    private VerticalMovementState verticalMovementState;
-    private HorizontalMovementState horizontalMovementState;
 
     private const string MELEE_WEAPON_ACTIVE_TIME_KEY = "MELEE_WEAPON_ACTIVE_TIME_KEY";
 
