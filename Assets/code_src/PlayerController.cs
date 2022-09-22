@@ -56,9 +56,9 @@ public class PlayerController : MonoBehaviour
     private enum HorizontalMovementState
     {
         Error,
-        Standing,
-        RunningLeft,
-        RunningRight
+        NotMoving,
+        MovingLeft,
+        MovingRight
     }
 
     private const string MELEE_WEAPON_ACTIVE_TIME_KEY = "MELEE_WEAPON_ACTIVE_TIME_KEY";
@@ -97,15 +97,15 @@ public class PlayerController : MonoBehaviour
 
         if (inputX > INPUT_DEAD_ZONE)
         {
-            newState = HorizontalMovementState.RunningRight;
+            newState = HorizontalMovementState.MovingRight;
         }
         else if (inputX < -INPUT_DEAD_ZONE)
         {
-            newState = HorizontalMovementState.RunningLeft;
+            newState = HorizontalMovementState.MovingLeft;
         }
         else
         {
-            newState = HorizontalMovementState.Standing;
+            newState = HorizontalMovementState.NotMoving;
         }
 
         return newState;
@@ -215,10 +215,10 @@ public class PlayerController : MonoBehaviour
     {
         switch (horizontalMovementState)
         {
-            case HorizontalMovementState.Standing:
+            case HorizontalMovementState.NotMoving:
                 break;
-            case HorizontalMovementState.RunningRight:
-            case HorizontalMovementState.RunningLeft:
+            case HorizontalMovementState.MovingRight:
+            case HorizontalMovementState.MovingLeft:
                 rb.AddForce(new Vector2(inputX * maxXSpeed, 0f), ForceMode2D.Impulse);
                 break;
 
