@@ -1333,10 +1333,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35d5561618f22ef49b373887f68e8852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MAX_FIRST_JUMP_TIME: 0.2
   MELEE_WEAPON_ACTIVE_TIME: 0.1
-  maxXSpeed: 4
+  maxXSpeed: 5
   maxYSpeed: 8
-  jumpForce: 8
+  firstJumpTimer: 0
+  firstJumpForce: 6
+  firstJumpInProgressForce: 10
+  doubleJumpForce: 6
 --- !u!50 &787844049
 Rigidbody2D:
   serializedVersion: 4
